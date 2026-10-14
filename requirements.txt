@@ -1,0 +1,43 @@
+# ---------------------------------------------------------------------------
+# INTENTIONALLY VULNERABLE DEPENDENCY SET - SECURITY SCANNER DEMO ONLY
+# Pinned to old versions with known CVEs so Syft/Grype produce rich output.
+# This set is not meant to be installed together - DO NOT DEPLOY.
+# ---------------------------------------------------------------------------
+
+# --- Web frameworks / servers ---
+Django==2.2.0
+Flask==0.12.2
+Werkzeug==0.15.3
+Jinja2==2.10
+gunicorn==19.9.0
+
+# --- HTTP clients ---
+requests==2.19.1
+urllib3==1.24.1
+aiohttp==3.8.1
+
+# --- Parsing / serialization ---
+PyYAML==5.3
+lxml==4.6.2
+
+# --- Crypto / auth ---
+cryptography==3.2
+PyJWT==1.7.1
+paramiko==2.4.0
+
+# --- Data / imaging ---
+numpy==1.16.0
+Pillow==6.2.0
+
+# --- AI / LLM SDKs and frameworks (Cisco AIBOM + Grype) ---
+openai==0.27.0
+anthropic==0.25.0
+groq==0.4.2
+langchain==0.0.171
+llama-index==0.9.48
+transformers==4.30.0
+torch==1.13.0
+huggingface-hub==0.14.1
+gradio==3.34.0
+tiktoken==0.4.0
+chromadb==0.4.0
