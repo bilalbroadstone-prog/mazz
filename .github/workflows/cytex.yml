@@ -97,20 +97,31 @@ jobs:
           AIBOM_LLM_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
           set +e
-          timeout 600 cisco-aibom analyze "$SCAN_DIR" \
-            -o cyclonedx -O "$REPORT_DIR/aibom.cdx.json" \
-            --llm-model "$AIBOM_LLM_MODEL" \
-            --llm-provider "$AIBOM_LLM_PROVIDER" \
-            --llm-api-key "$AIBOM_LLM_API_KEY" \
-            --agentic-fast-model "$AIBOM_FAST_MODEL" \
-            --severity info \
-            --agentic-batch-size 3 \
-            --agentic-concurrency 1 \
-            --agentic-timeout 120 \
-            --compliance all \
-            --timing \
-            --validate \
-            --show-summary 2>&1 | tee "$REPORT_DIR/aibom_console.txt"
+          if [ -z "$AIBOM_LLM_API_KEY" ]; then
+            echo "No GROQ_API_KEY secret -- generating AIBOM without LLM enrichment"
+            timeout 600 cisco-aibom analyze "$SCAN_DIR" \
+              -o cyclonedx -O "$REPORT_DIR/aibom.cdx.json" \
+              --severity info \
+              --compliance all \
+              --timing \
+              --validate \
+              --show-summary 2>&1 | tee "$REPORT_DIR/aibom_console.txt"
+          else
+            timeout 600 cisco-aibom analyze "$SCAN_DIR" \
+              -o cyclonedx -O "$REPORT_DIR/aibom.cdx.json" \
+              --llm-model "$AIBOM_LLM_MODEL" \
+              --llm-provider "$AIBOM_LLM_PROVIDER" \
+              --llm-api-key "$AIBOM_LLM_API_KEY" \
+              --agentic-fast-model "$AIBOM_FAST_MODEL" \
+              --severity info \
+              --agentic-batch-size 3 \
+              --agentic-concurrency 1 \
+              --agentic-timeout 120 \
+              --compliance all \
+              --timing \
+              --validate \
+              --show-summary 2>&1 | tee "$REPORT_DIR/aibom_console.txt"
+          fi
           echo "AIBOM_STATUS=${PIPESTATUS[0]}" >> "$GITHUB_ENV"
 
       - name: Scan agent skills (skill-scanner)
